@@ -37,6 +37,8 @@ architecture RTL of FetchStage is
     signal interrupt2_instruction: std_logic_vector(15 downto 0);
 
     
+    signal next_pc_sel: std_logic_vector(2 downto 0);
+
 
 begin
 
