@@ -129,5 +129,10 @@ begin
         end if;
     end process;
 
+    o_Result <= i_Result;
+    o_Rdest  <= i_Rdest;
+    o_control_signals <= i_control_signals;
+    
+
 
 end architecture MemoryStage_RTL;
