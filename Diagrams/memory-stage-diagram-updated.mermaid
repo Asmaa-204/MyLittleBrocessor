@@ -1,0 +1,47 @@
+graph TD
+    subgraph Inputs
+        nextPC[Next PC]
+        flags[Flags]
+        R1[R1]
+        IMM[Immediate]
+        Result[ALU Result]
+        ctrl[Control Signals]
+    end
+
+    subgraph Stack_Pointer
+        SP[SP Register]
+        SP -->|+1| SPNext[SP + 1]
+        SP -->|-1| SPPrev[SP - 1]
+        SPNext --> SPMux[SP MUX]
+        SPPrev --> SPMux
+        SP --> SPMux
+        SPMux -->|SP_enable & SP_update| SP
+    end
+
+    subgraph Memory_Access
+        RAM[RAM Instance]
+        DataMux[Data MUX]
+        AddrMux[Address MUX]
+        
+        R1 --> DataMux
+        IMM --> DataMux
+        
+        Result --> AddrMux
+        SPMux --> AddrMux
+        
+        DataMux -->|write_data| RAM
+        AddrMux -->|addr| RAM
+        RAM -->|read_data| MemOut[Memory Output]
+    end
+
+    subgraph Outputs
+        MemOut --> o_mem_read[Memory Read Data]
+        Result --> o_result[Result]
+    end
+
+    subgraph Control
+        MemCtrl[Memory Controls]
+        MemCtrl -->|mem_write_data_sel| DataMux
+        MemCtrl -->|mem_addr_sel| AddrMux
+        MemCtrl -->|SP_sel| SPMux
+    end
