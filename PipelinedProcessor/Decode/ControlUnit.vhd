@@ -62,7 +62,7 @@ architecture RTL of ControlUnit is
     constant JN: std_logic_vector(4 downto 0) := "10101";
     constant JC: std_logic_vector(4 downto 0) := "10110";
     constant JMP: std_logic_vector(4 downto 0) := "10111";
-    constant CALL: std_logic_vector(4 downto 0) := "11000";
+    constant CALL: std_logic_vector(4 downto 0) := "11011"; --//TODO: Change to 11011
 
     constant RET: std_logic_vector(4 downto 0) := "11001";
     constant RTI: std_logic_vector(4 downto 0) := "11010";

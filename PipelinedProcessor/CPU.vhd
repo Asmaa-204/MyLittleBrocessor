@@ -38,6 +38,7 @@ architecture RTL of CPU is
     signal decode_o_Rsrc2: std_logic_vector(2 downto 0);
     signal decode_o_Rdest: std_logic_vector(2 downto 0);
     signal decode_o_control_signals: std_logic_vector(39 downto 0);
+    signal decode_o_flush
 
     -- ID/EX Register Signals
     signal id_ex_o_next_pc: std_logic_vector(15 downto 0);
@@ -122,6 +123,11 @@ begin
         i_instruction => if_id_o_instruction,
         i_immediate => if_id_o_immediate,
 
+        i_ID_EX_Rdest => id_ex_o_Rdest,
+        i_ID_EX_mem_read_enable => id_ex_o_control_signals(31),
+
+        i_flags => execute_o_flags,
+
         i_input_io => s_input,
         
         i_write_enable => wb_o_write_enable,
@@ -135,6 +141,7 @@ begin
         o_Rsrc1 => decode_o_Rsrc1,
         o_Rsrc2 => decode_o_Rsrc2,
         o_Rdest => decode_o_Rdest,
+
         o_control_signals => decode_o_control_signals
     );
 

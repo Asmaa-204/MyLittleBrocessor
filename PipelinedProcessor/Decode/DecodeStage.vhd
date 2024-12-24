@@ -13,6 +13,13 @@ entity DecodeStage is
         i_instruction: in std_logic_vector(15 downto 0);
         i_immediate: in std_logic_vector(15 downto 0);
 
+        -- Inptuts From ID/EX Buffer
+        i_ID_EX_Rdest: in std_logic_vector(2 downto 0);
+        i_ID_EX_mem_read_enable: in std_logic;
+
+        -- Inputs From Execute Stage
+        i_flags: in std_logic_vector(2 downto 0);
+
         -- Inputs From IO
         i_input_io: in std_logic_vector(15 downto 0);
 
@@ -32,6 +39,9 @@ entity DecodeStage is
 
         -- Control Signals
         o_control_signals: out std_logic_vector(39 downto 0)
+
+        -- Hazards
+        stall: out std_logic;
     );
 end entity DecodeStage;
 
@@ -61,7 +71,6 @@ architecture DecodeStage_RTL of DecodeStage is
     -- Control signals
     signal decode_signals: std_logic_vector(0 downto 0);
     signal io_in: std_logic := '0';
-
 
 begin
 
@@ -107,6 +116,18 @@ begin
             i_opCode => OpCode,
             i_extra_two_bits => Extra_two_bits,
             o_control_signals => control_signals
+        );
+
+
+    HazardUnit_Instance: entity work.HazardUnit
+        port map(
+            i_IF_ID_Rsrc1 => Rsrc1,
+            i_IF_ID_Rsrc2 => Rsrc2,
+            i_ID_EX_Rdest => i_ID_EX_Rdest,
+            i_ID_EX_mem_read_enable => i_ID_EX_mem_read_enable,
+            i_flags => i_flags,
+            i_jump_enable => control_signals(18),
+            i_jump_type => OpCode(1 downto 0)
         );
 
 
