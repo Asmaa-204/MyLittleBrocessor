@@ -32,11 +32,14 @@ begin
     begin
         if reset = '1' then 
             RF <= (others => (others => '0'));
-        elsif rising_edge(clk) then
+        elsif falling_edge(clk) then
             if i_write_enable = '1' then
                 RF(to_integer(unsigned(i_Rdest))) <= i_write_data;
             end if;
         end if;
+
+        
+
     end process;
 
     o_read_data_1 <= RF(to_integer(unsigned(i_Rsrc1)));

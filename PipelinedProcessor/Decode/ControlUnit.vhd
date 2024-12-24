@@ -3,6 +3,24 @@ use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
 
 
+-- NOP:    0x0000000000
+-- SETC:   0x2100000000
+-- MOV:    0x2000000000
+-- IN:     0xD000010000
+-- OUT:    0xC000040000
+
+-- NOT:    0x4100100000
+-- ADD:    0x6100100000
+-- SUB:    0x8100010000
+-- AND:    0xA100010000
+-- INC:    0x0100010000
+-- PUSH:   0x0054000000
+-- POP:    0x009D900000
+-- IADD:   0x6900010000
+-- LDM:    0xD000010000
+-- LDD:    0x6880100000
+-- STD:    0x7040000000
+
 entity ControlUnit is 
     port(
         clk: in std_logic;
@@ -111,27 +129,27 @@ architecture RTL of ControlUnit is
 
 -- Control Signals
 
-    constant NOP_CTRL: std_logic_vector(CONTROL_WIDTH-1 downto 0) := DEFAULT_CTRL;
+    constant NOP_CTRL: std_logic_vector(CONTROL_WIDTH-1 downto 0) := x"0000000000";
     constant HLT_CTRL: std_logic_vector(CONTROL_WIDTH-1 downto 0) := DEFAULT_CTRL;
-    constant SETC_CTRL: std_logic_vector(CONTROL_WIDTH-1 downto 0) := DEFAULT_CTRL;
-    constant INPUT_CTRL: std_logic_vector(CONTROL_WIDTH-1 downto 0) := DEFAULT_CTRL;
-    constant OUTPUT_CTRL: std_logic_vector(CONTROL_WIDTH-1 downto 0) := DEFAULT_CTRL;
+    constant SETC_CTRL: std_logic_vector(CONTROL_WIDTH-1 downto 0) := x"2100000000";
+    constant INPUT_CTRL: std_logic_vector(CONTROL_WIDTH-1 downto 0) := x"D000180000";
+    constant OUTPUT_CTRL: std_logic_vector(CONTROL_WIDTH-1 downto 0) := x"C000400000";
 
-    constant NOT_CTRL: std_logic_vector(CONTROL_WIDTH-1 downto 0) := DEFAULT_CTRL;
-    constant INC_CTRL: std_logic_vector(CONTROL_WIDTH-1 downto 0) := DEFAULT_CTRL;
-    constant MOV_CTRL: std_logic_vector(CONTROL_WIDTH-1 downto 0) := DEFAULT_CTRL;
+    constant NOT_CTRL: std_logic_vector(CONTROL_WIDTH-1 downto 0) := x"4100100000";
+    constant INC_CTRL: std_logic_vector(CONTROL_WIDTH-1 downto 0) := x"0100100000";
+    constant MOV_CTRL: std_logic_vector(CONTROL_WIDTH-1 downto 0) := x"2000100000";
 
-    constant ADD_CTRL: std_logic_vector(CONTROL_WIDTH-1 downto 0) := DEFAULT_CTRL;
-    constant SUB_CTRL: std_logic_vector(CONTROL_WIDTH-1 downto 0) := DEFAULT_CTRL;
-    constant AND_CTRL: std_logic_vector(CONTROL_WIDTH-1 downto 0) := DEFAULT_CTRL;
+    constant ADD_CTRL: std_logic_vector(CONTROL_WIDTH-1 downto 0) := x"6100100000";
+    constant SUB_CTRL: std_logic_vector(CONTROL_WIDTH-1 downto 0) := x"8100100000";
+    constant AND_CTRL: std_logic_vector(CONTROL_WIDTH-1 downto 0) := x"A100100000";
 
-    constant PUSH_CTRL: std_logic_vector(CONTROL_WIDTH-1 downto 0) := DEFAULT_CTRL;
-    constant POP_CTRL: std_logic_vector(CONTROL_WIDTH-1 downto 0) := DEFAULT_CTRL;
+    constant PUSH_CTRL: std_logic_vector(CONTROL_WIDTH-1 downto 0) := x"0054000000";
+    constant POP_CTRL: std_logic_vector(CONTROL_WIDTH-1 downto 0) := x"009D900000";
 
-    constant IADD_CTRL: std_logic_vector(CONTROL_WIDTH-1 downto 0) := DEFAULT_CTRL;
-    constant LDM_CTRL: std_logic_vector(CONTROL_WIDTH-1 downto 0) := DEFAULT_CTRL;
-    constant LDD_CTRL: std_logic_vector(CONTROL_WIDTH-1 downto 0) := DEFAULT_CTRL;
-    constant STD_CTRL: std_logic_vector(CONTROL_WIDTH-1 downto 0) := DEFAULT_CTRL;
+    constant IADD_CTRL: std_logic_vector(CONTROL_WIDTH-1 downto 0) := x"6900100000";
+    constant LDM_CTRL: std_logic_vector(CONTROL_WIDTH-1 downto 0) := x"D000100000";
+    constant LDD_CTRL: std_logic_vector(CONTROL_WIDTH-1 downto 0) := x"6880900000";
+    constant STD_CTRL: std_logic_vector(CONTROL_WIDTH-1 downto 0) := x"7040000000";
 
     constant JZ_CTRL: std_logic_vector(CONTROL_WIDTH-1 downto 0) := DEFAULT_CTRL;
     constant JN_CTRL: std_logic_vector(CONTROL_WIDTH-1 downto 0) := DEFAULT_CTRL;

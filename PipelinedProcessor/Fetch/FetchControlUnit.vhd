@@ -8,9 +8,7 @@ entity FetchControlUnit is
         -- Inputs
         i_instruction: in std_logic_vector(15 downto 0);
         -- Outputs
-        o_instruction: out std_logic_vector(15 downto 0);
-
-        o_next_pc_type: out std_logic_vector(2 downto 0);
+        o_instruction: out std_logic_vector(15 downto 0)
     );
 end entity FetchControlUnit;
 
@@ -39,7 +37,6 @@ begin
             immediate_counter_reg <= immediate_counter;
         end if;
     end process;
-
 
     process(i_instruction, instruction_mid_register, immediate_counter, instruction_type, immediate_counter_reg)  
     begin

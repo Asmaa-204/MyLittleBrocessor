@@ -54,10 +54,10 @@ begin
     -- disect the control signals
     wb_signals <= i_control_signals(23 downto 20);
 
-    wb_data_sel <= wb_signals(0);
-    io_out <= wb_signals(1);
-    wb_return <= wb_signals(2);
-    write_enable <= wb_signals(3);
+    wb_data_sel <= wb_signals(3); --// 23
+    io_out <= wb_signals(2); --// 22
+    wb_return <= wb_signals(1); --// 21
+    write_enable <= wb_signals(0); --// 20
     
 
     with wb_data_sel select

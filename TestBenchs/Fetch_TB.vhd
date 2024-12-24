@@ -13,7 +13,6 @@ architecture sim of FetchStage_TB is
     signal reset: std_logic := '0';
     
     -- Inputs
-    signal i_next_pc: std_logic_vector(15 downto 0) := (others => '0');
     signal i_R1: std_logic_vector(15 downto 0) := (others => '0');
     signal i_WB_data: std_logic_vector(15 downto 0) := (others => '0');
     
@@ -35,7 +34,6 @@ begin
     port map (
         clk => clk,
         reset => reset,
-        i_next_pc => pc,  -- Connect PC directly
         i_R1 => i_R1,
         i_WB_data => i_WB_data,
         o_instruction => o_instruction,

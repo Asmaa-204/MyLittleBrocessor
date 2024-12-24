@@ -11,7 +11,7 @@ entity EX_MEM_Register is
 
         -- Inputs
         i_next_pc: in std_logic_vector(15 downto 0);
-        i_flags: in std_logic_vector(3 downto 0);
+        i_flags: in std_logic_vector(2 downto 0);
         i_Rdest: in std_logic_vector(2 downto 0);
         i_R1: in std_logic_vector(15 downto 0);
         i_immediate: in std_logic_vector(15 downto 0);
@@ -20,7 +20,7 @@ entity EX_MEM_Register is
 
         -- Outputs
         o_next_pc: out std_logic_vector(15 downto 0);
-        o_flags: out std_logic_vector(3 downto 0);
+        o_flags: out std_logic_vector(2 downto 0);
         o_Rdest: out std_logic_vector(2 downto 0);
         o_R1: out std_logic_vector(15 downto 0);
         o_immediate: out std_logic_vector(15 downto 0);
@@ -33,7 +33,7 @@ end entity EX_MEM_Register;
 architecture RTL of EX_MEM_Register is
 
     signal next_pc_reg: std_logic_vector(15 downto 0);
-    signal flags_reg: std_logic_vector(3 downto 0);
+    signal flags_reg: std_logic_vector(2 downto 0);
     signal Rdest_reg: std_logic_vector(2 downto 0);
     signal R1_reg: std_logic_vector(15 downto 0);
     signal immediate_reg: std_logic_vector(15 downto 0);

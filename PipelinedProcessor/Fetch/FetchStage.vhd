@@ -10,7 +10,7 @@ entity FetchStage is
         reset: in std_logic;
 
         -- Inputs to PC Select Mux
-        i_next_pc: in std_logic_vector(15 downto 0);
+        -- i_next_pc: in std_logic_vector(15 downto 0);
         i_R1: in std_logic_vector(15 downto 0);
         i_WB_data: in std_logic_vector(15 downto 0);
 
@@ -27,7 +27,7 @@ architecture RTL of FetchStage is
     signal instruction: std_logic_vector(15 downto 0);
     
     -- PC
-    signal pc_register: std_logic_vector(15 downto 0);
+    signal pc_register: std_logic_vector(15 downto 0) := (others => '0');
 
     -- special instructions
     signal reset_instruction: std_logic_vector(15 downto 0);
@@ -36,17 +36,14 @@ architecture RTL of FetchStage is
     signal interrupt1_instruction: std_logic_vector(15 downto 0);
     signal interrupt2_instruction: std_logic_vector(15 downto 0);
 
-    
-    signal next_pc_sel: std_logic_vector(2 downto 0);
-
 
 begin
 
-    -- Update PC
+    -- Update PC (//TODO: Add PC Select Mux)
     process(clk) 
     begin
         if rising_edge(clk) then
-            pc_register <= i_next_pc;
+            pc_register <= std_logic_vector(unsigned(pc_register) + 1);
         end if;
     end process;
 

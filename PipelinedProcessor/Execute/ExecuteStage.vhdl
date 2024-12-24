@@ -91,12 +91,12 @@ begin
 
     exec_signals <= i_control_signals(39 downto 32);
 
-    alu_control <= exec_signals(2 downto 0);
-    op1_sel <= exec_signals(3);
-    op2_sel <= exec_signals(4);
-    saveflag <= exec_signals(5);
-    loadflag <= exec_signals(6);
-    flag_enable <= exec_signals(7);
+    alu_control <= exec_signals(7 downto 5); -- // 39 to 37
+    op1_sel <= exec_signals(4); --// 36
+    op2_sel <= exec_signals(3); --// 35
+    saveflag <= exec_signals(2); --// 34
+    loadflag <= exec_signals(1); --// 33
+    flag_enable <= exec_signals(0); --// 32
 
     -----------------------------------------
     -- INSTANTIATE COMPONENTS

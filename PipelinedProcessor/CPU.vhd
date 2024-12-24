@@ -34,57 +34,56 @@ architecture RTL of CPU is
     signal decode_o_R1: std_logic_vector(15 downto 0);
     signal decode_o_R2: std_logic_vector(15 downto 0);
     signal decode_o_immediate: std_logic_vector(15 downto 0);
-    signal decode_o_Rsrc1: std_logic_vector(3 downto 0);
-    signal decode_o_Rsrc2: std_logic_vector(3 downto 0);
-    signal decode_o_Rdest: std_logic_vector(3 downto 0);
-    signal decode_o_control_signals: std_logic_vector(15 downto 0);
+    signal decode_o_Rsrc1: std_logic_vector(2 downto 0);
+    signal decode_o_Rsrc2: std_logic_vector(2 downto 0);
+    signal decode_o_Rdest: std_logic_vector(2 downto 0);
+    signal decode_o_control_signals: std_logic_vector(39 downto 0);
 
     -- ID/EX Register Signals
     signal id_ex_o_next_pc: std_logic_vector(15 downto 0);
     signal id_ex_o_R1: std_logic_vector(15 downto 0);
     signal id_ex_o_R2: std_logic_vector(15 downto 0);
     signal id_ex_o_immediate: std_logic_vector(15 downto 0);
-    signal id_ex_o_Rsrc1: std_logic_vector(3 downto 0);
-    signal id_ex_o_Rsrc2: std_logic_vector(3 downto 0);
-    signal id_ex_o_Rdest: std_logic_vector(3 downto 0);
-    signal id_ex_o_control_signals: std_logic_vector(15 downto 0);
+    signal id_ex_o_Rsrc1: std_logic_vector(2 downto 0);
+    signal id_ex_o_Rsrc2: std_logic_vector(2 downto 0);
+    signal id_ex_o_Rdest: std_logic_vector(2 downto 0);
+    signal id_ex_o_control_signals: std_logic_vector(39 downto 0);
 
     -- Execute Stage Signals
     signal execute_o_next_pc: std_logic_vector(15 downto 0);
-    signal execute_o_flags: std_logic_vector(3 downto 0);
-    signal execute_o_Rdest: std_logic_vector(3 downto 0);
+    signal execute_o_flags: std_logic_vector(2 downto 0);
+    signal execute_o_Rdest: std_logic_vector(2 downto 0);
     signal execute_o_R1: std_logic_vector(15 downto 0);
     signal execute_o_immediate: std_logic_vector(15 downto 0);
     signal execute_o_Result: std_logic_vector(15 downto 0);
-    signal execute_o_control_signals: std_logic_vector(15 downto 0);
+    signal execute_o_control_signals: std_logic_vector(39 downto 0);
 
     -- EX/MEM Register Signals
     signal ex_mem_o_next_pc: std_logic_vector(15 downto 0);
-    signal ex_mem_o_flags: std_logic_vector(3 downto 0);
-    signal ex_mem_o_Rdest: std_logic_vector(3 downto 0);
+    signal ex_mem_o_flags: std_logic_vector(2 downto 0);
+    signal ex_mem_o_Rdest: std_logic_vector(2 downto 0);
     signal ex_mem_o_R1: std_logic_vector(15 downto 0);
     signal ex_mem_o_immediate: std_logic_vector(15 downto 0);
     signal ex_mem_o_Result: std_logic_vector(15 downto 0);
-    signal ex_mem_o_control_signals: std_logic_vector(15 downto 0);
+    signal ex_mem_o_control_signals: std_logic_vector(39 downto 0);
 
     -- Memory Stage Signals
     signal memory_o_mem_read_data: std_logic_vector(15 downto 0);
     signal memory_o_Result: std_logic_vector(15 downto 0);
-    signal memory_o_Rdest: std_logic_vector(3 downto 0);
-    signal memory_o_control_signals: std_logic_vector(15 downto 0);
+    signal memory_o_Rdest: std_logic_vector(2 downto 0);
+    signal memory_o_control_signals: std_logic_vector(39 downto 0);
 
     -- MEM/WB Register Signals
     signal mem_wb_o_mem_read_data: std_logic_vector(15 downto 0);
     signal mem_wb_o_Result: std_logic_vector(15 downto 0);
-    signal mem_wb_o_Rdest: std_logic_vector(3 downto 0);
-    signal mem_wb_o_control_signals: std_logic_vector(15 downto 0);
+    signal mem_wb_o_Rdest: std_logic_vector(2 downto 0);
+    signal mem_wb_o_control_signals: std_logic_vector(39 downto 0);
 
     -- WriteBack Stage Signals
     signal wb_o_write_enable: std_logic;
     signal wb_o_write_data: std_logic_vector(15 downto 0);
-    signal wb_o_Rdest: std_logic_vector(3 downto 0);
+    signal wb_o_Rdest: std_logic_vector(2 downto 0);
     signal wb_o_output_io: std_logic_vector(15 downto 0);
-
 
 begin
     Fetch_Stage_Instance: entity work.FetchStage
@@ -92,8 +91,7 @@ begin
         clk => clk,
         reset => reset,
 
-        i_next_pc => //TODO:,
-        i_R1 => //TODO:,
+        i_R1 => decode_o_R1,
         i_WB_data => wb_o_write_data,
 
         o_instruction => fetch_o_instruction,
@@ -104,15 +102,15 @@ begin
     IF_ID_Register: entity work.IF_ID_Register
     port map(
         clk => clk,
-        flush => //TODO:,
+        flush => decode_o_control_signals(0),
         
         i_instruction => fetch_o_instruction,
         i_next_pc => fetch_o_next_pc,
         i_immediate => fetch_o_immediate,
         
         o_instruction => if_id_o_instruction,
-        o_immediate => if_id_o_immediate
-        o_next_pc => if_id_o_next_pc,
+        o_immediate => if_id_o_immediate,
+        o_next_pc => if_id_o_next_pc
     );
 
     Decode_Stage_Instance: entity work.DecodeStage
@@ -143,7 +141,7 @@ begin
     ID_EX_Register: entity work.ID_EX_Register
     port map(
         clk => clk,
-        flush => reset,
+        flush => decode_o_control_signals(1),
 
         i_next_pc => decode_o_next_pc,
         i_R1 => decode_o_R1,
@@ -179,11 +177,11 @@ begin
         i_Rsrc2 => id_ex_o_Rsrc2,
 
         i_MEM_WB_Rdest => mem_wb_o_Rdest,
-        i_MEM_WB_RegWrite => mem_wb_o_control_signals(//TODO:),
+        i_MEM_WB_RegWrite => wb_o_write_enable,
         i_WB_Data => wb_o_write_data,
 
         i_EX_MEM_Rdest => ex_mem_o_Rdest,
-        i_EX_MEM_RegWrite => ex_mem_o_control_signals(//TODO:),
+        i_EX_MEM_RegWrite => ex_mem_o_control_signals(20),
         i_EX_MEM_Result => ex_mem_o_Result,
 
         i_control_signals => id_ex_o_control_signals,
@@ -200,7 +198,7 @@ begin
     EX_MEM_Register: entity work.EX_MEM_Register
     port map(
         clk => clk,
-        flush => //TODO:,
+        flush => decode_o_control_signals(2),
         
         i_next_pc => execute_o_next_pc,
         i_flags => execute_o_flags,
@@ -240,7 +238,7 @@ begin
     MEM_WB_Register: entity work.MEM_WB_Register
     port map(
         clk => clk,
-        flush => //TODO:,
+        flush => decode_o_control_signals(3),
 
         i_mem_read_data => memory_o_mem_read_data,
         i_Result => memory_o_Result,
@@ -263,7 +261,7 @@ begin
         i_Rdest => mem_wb_o_Rdest,
         i_control_signals => mem_wb_o_control_signals,
 
-        o_wrote_enable => wb_o_write_enable,
+        o_write_enable => wb_o_write_enable,
         o_write_data => wb_o_write_data,
         o_Rdest => wb_o_Rdest,
         o_output_io => wb_o_output_io

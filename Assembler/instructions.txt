@@ -1,11 +1,11 @@
-nop
-hlt
-setc
-in r0
-out r1
-not r0, r1
-.ORG f
-add r1, r2, r3
-push r4
-pop r5
-iadd r2, r3, 0x10
+not r2 r1
+add r1, r3, r4
+sub r5, r6, r7
+out r2
+in r3
+and r5, r6, r7
+push r1
+pop r2
+
+
+

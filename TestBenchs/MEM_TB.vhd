@@ -84,7 +84,7 @@ begin
         o_Rdest => o_Rdest,
         o_control_signals => o_control_signals
     );
-
+]
     -- Clock process
     clk_process: process
     begin
@@ -121,13 +121,7 @@ begin
 
 
 
-        
 
-
-
-
-
-        
 
      -- Report final test status
         if test_error_count = 0 then
