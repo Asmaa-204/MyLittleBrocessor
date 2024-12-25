@@ -26,7 +26,7 @@ INSTRUCTION_SET = {
     "jn":   {INSTRUCTION_KEYS[0]:"10101", INSTRUCTION_KEYS[1]:"000", INSTRUCTION_KEYS[2]:"000", INSTRUCTION_KEYS[3]:"000", INSTRUCTION_KEYS[4]:"00"},
     "jc":   {INSTRUCTION_KEYS[0]:"10110", INSTRUCTION_KEYS[1]:"000", INSTRUCTION_KEYS[2]:"000", INSTRUCTION_KEYS[3]:"000", INSTRUCTION_KEYS[4]:"00"},
     "jmp":  {INSTRUCTION_KEYS[0]:"10111", INSTRUCTION_KEYS[1]:"000", INSTRUCTION_KEYS[2]:"000", INSTRUCTION_KEYS[3]:"000", INSTRUCTION_KEYS[4]:"00"},
-    "call": {INSTRUCTION_KEYS[0]:"11011", INSTRUCTION_KEYS[1]:"000", INSTRUCTION_KEYS[2]:"000", INSTRUCTION_KEYS[3]:"000", INSTRUCTION_KEYS[4]:"00"},
+    "call": {INSTRUCTION_KEYS[0]:"11000", INSTRUCTION_KEYS[1]:"000", INSTRUCTION_KEYS[2]:"000", INSTRUCTION_KEYS[3]:"000", INSTRUCTION_KEYS[4]:"00"},
     "ret":  {INSTRUCTION_KEYS[0]:"11001", INSTRUCTION_KEYS[1]:"000", INSTRUCTION_KEYS[2]:"000", INSTRUCTION_KEYS[3]:"000", INSTRUCTION_KEYS[4]:"10"},
     "rti":  {INSTRUCTION_KEYS[0]:"11010", INSTRUCTION_KEYS[1]:"000", INSTRUCTION_KEYS[2]:"000", INSTRUCTION_KEYS[3]:"000", INSTRUCTION_KEYS[4]:"10"},
     "int":  {INSTRUCTION_KEYS[0]:"11100", INSTRUCTION_KEYS[1]:"000", INSTRUCTION_KEYS[2]:"000", INSTRUCTION_KEYS[3]:"000", INSTRUCTION_KEYS[4]:"11"},
@@ -63,6 +63,8 @@ def write_to_output_file(line):
     print(line)
 
 def convert_instruction_to_binary(parts):
+    if (parts[0] not in INSTRUCTION_SET):
+        return None, parts[0]
     copied_obj = copy.copy(INSTRUCTION_SET[parts[0]])
     imm_val = None
     match parts[0]:
@@ -100,6 +102,7 @@ def convert_instruction_to_binary(parts):
             # indx can only be either 0 or 1
             copied_obj[INSTRUCTION_KEYS[1]] = '00' + parts[1]
 
+
     return construct_binary_instruction(copied_obj), imm_val
 
 def process_instructions(input_file: str, output_file: str):
@@ -108,16 +111,17 @@ def process_instructions(input_file: str, output_file: str):
             i = 0
             for line in infile:
                 line = line.strip()
-                if not line:
+                if not line or line[0] == '#':
                     continue
                 parsed = parse_instruction(line)
                 if (parsed[0] == '.org'):
                     while (i < int(parsed[1], 16) - 1):
-                        outfile.write(hex_to_binary(construct_binary_instruction(INSTRUCTION_SET["nop"])) + "\n")
+                        # outfile.write(hex_to_binary(construct_binary_instruction(INSTRUCTION_SET["nop"])) + "\n")
                         i += 1
                     continue
                 instruction, imm_val = convert_instruction_to_binary(parsed)
-                outfile.write(instruction + "\n")
+                if instruction:
+                    outfile.write(instruction + "\n")
                 if imm_val:
                     outfile.write(hex_to_binary(imm_val) + "\n")
                 i += 1
@@ -128,7 +132,7 @@ def process_instructions(input_file: str, output_file: str):
 
 # Example usage
 if __name__ == "__main__":
-    input_file = "instructions.txt"
+    input_file = "TestCase1.asm"
     output_file = "output.bin"
 
     process_instructions(input_file, output_file)
